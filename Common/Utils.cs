@@ -10,7 +10,8 @@ namespace L2AutoTestGenerator.Common
 {
         public static class Utils
         {
-            public static void ExportJson(object fields)
+        #region Export JSON
+        public static void ExportJson(object fields)
             {
                 using (StreamWriter file = File.CreateText(Constant.SAVE_TEMP_FILE_PATH))
                 {
@@ -20,4 +21,5 @@ namespace L2AutoTestGenerator.Common
                 }
             }
         }
+        #endregion
 }

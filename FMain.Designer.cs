@@ -36,7 +36,6 @@
             this.dlgImport = new System.Windows.Forms.OpenFileDialog();
             this.dlgExport = new System.Windows.Forms.SaveFileDialog();
             this.dlgGenerate = new System.Windows.Forms.SaveFileDialog();
-            this.colNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colVal = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFields)).BeginInit();
@@ -68,6 +67,7 @@
             this.btnExport.TabIndex = 2;
             this.btnExport.Text = "Export CSV";
             this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // btnGen
             // 
@@ -83,7 +83,6 @@
             // 
             this.dgvFields.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvFields.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colNo,
             this.colKey,
             this.colVal});
             this.dgvFields.Location = new System.Drawing.Point(13, 84);
@@ -95,22 +94,17 @@
             // 
             this.dlgImport.FileName = "openFileDialog1";
             // 
-            // colNo
-            // 
-            this.colNo.HeaderText = "No.";
-            this.colNo.Name = "colNo";
-            // 
             // colKey
             // 
             this.colKey.HeaderText = "Key";
             this.colKey.Name = "colKey";
-            this.colKey.Width = 150;
+            this.colKey.Width = 200;
             // 
             // colVal
             // 
             this.colVal.HeaderText = "Value";
             this.colVal.Name = "colVal";
-            this.colVal.Width = 150;
+            this.colVal.Width = 200;
             // 
             // FMain
             // 
@@ -140,7 +134,6 @@
         private System.Windows.Forms.OpenFileDialog dlgImport;
         private System.Windows.Forms.SaveFileDialog dlgExport;
         private System.Windows.Forms.SaveFileDialog dlgGenerate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn colVal;
     }

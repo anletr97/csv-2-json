@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace L2AutoTestGenerator
@@ -32,14 +33,14 @@ namespace L2AutoTestGenerator
             using (var reader = new StreamReader(filePath))
             using (var csv = new CsvReader(reader, System.Globalization.CultureInfo.CurrentCulture))
             {
+                // Clear old grid
+                dgvFields.Rows.Clear();
                 var records = csv.GetRecords<Field>();
-                int i = 1;
                 foreach (Field field in records)
                 {
                     fields.Add(field);
                     // TODO check and overrided old values
-                    dgvFields.Rows.Add(i, field.Key, field.Value);
-                    i++;
+                    dgvFields.Rows.Add(field.Key, field.Value);
                 }
             }
         }
@@ -55,8 +56,8 @@ namespace L2AutoTestGenerator
                 foreach (DataGridViewRow row in dgvFields.Rows)
                 {
                     // Get data from data grid
-                    var key = row.Cells[1].Value;
-                    var value = row.Cells[2].Value;
+                    var key = row.Cells[0].Value;
+                    var value = row.Cells[1].Value;
 
                     if (null != key && null != value)
                     {
@@ -89,10 +90,53 @@ namespace L2AutoTestGenerator
                     "ERROR", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
                 return;
             }
-           
+
         }
         #endregion
 
+        #region Handle export csv
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            if (dgvFields.Rows.Count > 0)
+            {
+                SaveFileDialog dltExport = new SaveFileDialog();
+                dltExport.Filter = "CSV (*.csv)|*.csv";
+                dltExport.FileName =
+                    DateTime.UtcNow.Date.ToString("yyyyMMddHHmmss") + ".csv";
+                if (dltExport.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        int columnCount = dgvFields.Columns.Count;
+                        string columnNames = "";
+                        string[] outputCsv = new string[dgvFields.Rows.Count + 1];
+                        for (int i = 0; i < columnCount; i++)
+                        {
+                            columnNames += dgvFields.Columns[i].HeaderText.ToString() + ",";
+                        }
+                        outputCsv[0] += columnNames;
 
+                        for (int i = 1; (i - 1) < dgvFields.Rows.Count; i++)
+                        {
+                            for (int j = 0; j < columnCount; j++)
+                            {
+                                if (dgvFields.Rows[i - 1].Cells[j].Value != null)
+                                {
+                                    outputCsv[i] += dgvFields.Rows[i - 1].Cells[j].Value.ToString() + ",";
+                                }
+                            }
+                        }
+
+                        File.WriteAllLines(dltExport.FileName, outputCsv, Encoding.UTF8);
+                        MessageBox.Show("Data Exported Successfully !!!", "Info");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error :" + ex.Message);
+                    }
+                }
+            }
+        }
+        #endregion
     }
 }
